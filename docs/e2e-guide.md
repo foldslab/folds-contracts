@@ -1,0 +1,24 @@
+# End to end test flow
+
+- user: approve
+    - HMDX.approve(vault, amount)
+- user: deposit
+    - vault.deposit(amount)
+- user: check balance
+    - vault.balanceOf(address)
+- governance: invest
+    - vault.doHardWork()
+- check invested amount, should be === amount
+    - strategy.investedUnderlyingBalance()
+- governance: re-invest:
+    - strategy.setSellFloor(1) // optional
+    - vault.doHardWork()
+- user: check invested amount, should be > amount
+    - strategy.investedUnderlyingBalance()
+- governance: liquidate reward, withdraw all lp token from strategy. LP amount should be increased
+    - vault.withdrawAll() or strategy.withdrawAllToVault()
+    - vault.withdrawToVault(amount)
+- user: calculate Share Price
+    - vault.getPricePerFullShare()
+- user: get Estimated Withdrawal Amount
+    - vault.getEstimatedWithdrawalAmount(uint256 numberOfShares)
