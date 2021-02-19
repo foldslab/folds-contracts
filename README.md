@@ -1,5 +1,7 @@
 # Folds Finance
 
+Folds are custom yield farming strategies that enable users to earn from multiple incentive mechanisms simultaneously.
+
 ## Deploy
 
 0. Install packages
