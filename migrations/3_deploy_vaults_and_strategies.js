@@ -136,13 +136,14 @@ module.exports = async function (deployer, network, accounts) {
             VAULT_IMPL_ADDRESS: vaultImpl.address,    // implementation
         };
     }
+
     for (const vaultKey of vaultsToBeDeployed) {
         const vaultContracts = await deployVaultAndStrategy(vaultKey);
         deployedContracts[vaultKey] = vaultContracts;
 
-        console.log('Will save contracts, deployedContracts: ', deployedContracts)
-
+        console.log('New contracts added, deployedContracts: ', deployedContracts)
     }
+
     // write contract addresses to json file
     const path = __dirname + '/../constants/deployedContracts.js';
     fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(deployedContracts));
