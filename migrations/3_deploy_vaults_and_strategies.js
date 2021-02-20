@@ -13,7 +13,6 @@ const RewardToken = artifacts.require("RewardToken");
 const NoMintRewardPool = artifacts.require("NoMintRewardPool");
 
 const hecoAddresses = require('../constants/hecoAddresses')
-console.log('hecoAddresses: ', hecoAddresses);
 
 const deployedContracts = require('../constants/deployedContracts')
 console.log('deployedContracts: ', deployedContracts);
@@ -50,8 +49,9 @@ const vaultsToBeDeployed = [
 module.exports = async function (deployer, network, accounts) {
     async function deployVaultAndStrategy(vaultKey) {
         console.log('===== DEPLOY VAULTS CONTRACTS =====');
-        const storage = deployedContracts.STORAGE;
-        const controller = deployedContracts.CONTROLLER;
+        const storageAddress = deployedContracts.STORAGE;
+        const controller = await Controller.at(deployedContracts.CONTROLLER);
+
         console.log('======= will deploy vault: ', vaultKey, '=========');
 
         const { LP_ADDRESS, POOL_ID } = hecoAddresses.POOLS[vaultKey];
@@ -68,7 +68,7 @@ module.exports = async function (deployer, network, accounts) {
         const toInvestNumerator = 100;  // invest all
         const toInvestDenominator = 100;
         await vault.initializeVault(
-            storage.address,
+            storageAddress,
             LP_ADDRESS,
             toInvestNumerator,
             toInvestDenominator
@@ -104,7 +104,7 @@ module.exports = async function (deployer, network, accounts) {
         const token1Path = tokenLiquidationPaths[1];
 
         await strategy.initializeStrategy(
-            storage.address,
+            storageAddress,
             LP_ADDRESS,
             vault.address,
             cropPool.address,
@@ -138,16 +138,13 @@ module.exports = async function (deployer, network, accounts) {
     }
     for (const vaultKey of vaultsToBeDeployed) {
         const vaultContracts = await deployVaultAndStrategy(vaultKey);
-        const deployedContractsNew = {
-            ...deployedContracts,
-            [vaultKey]: vaultContracts
-        };
+        deployedContracts[vaultKey] = vaultContracts;
 
-        console.log('Will save contracts, deployedContractsNew: ', deployedContractsNew)
+        console.log('Will save contracts, deployedContracts: ', deployedContracts)
 
-        // write contract addresses to json file
-        const path = __dirname + '/../constants/deployedContracts.js';
-        fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(deployedContractsNew));
     }
+    // write contract addresses to json file
+    const path = __dirname + '/../constants/deployedContracts.js';
+    fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(deployedContracts));
 }
 
