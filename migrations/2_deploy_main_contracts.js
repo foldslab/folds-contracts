@@ -60,81 +60,12 @@ module.exports = async function (deployer, network, accounts) {
     // Storage setting
     await storage.setController(controller.address);
 
-    // Vault
-    await deployer.deploy(Vault);
-    const vaultImpl = await Vault.deployed();
-
-    await deployer.deploy(VaultProxy, vaultImpl.address);
-    const vaultProxy = await VaultProxy.deployed();
-
-    const vault = await Vault.at(vaultProxy.address);
-
-    await vault.initializeVault(
-        storage.address,
-        hecoAddresses.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
-        100,
-        100
-    );
-
-    // set up the strategy
-    await deployer.deploy(SushiMasterChefLPStrategy);
-    const strategyImpl = await SushiMasterChefLPStrategy.deployed();
-
-    await deployer.deploy(StrategyProxy, strategyImpl.address);
-    const strategyProxy = await StrategyProxy.deployed();
-
-    const strategy = await SushiMasterChefLPStrategy.at(strategyProxy.address);
-
-    console.log('strategy: ', strategy.address);
-
-    // external setup
-    const tokenLiquidationPaths = [
-        [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.HUSD_ADDRESS],
-        [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.USDT_ADDRESS]
-    ];
-    const poolID = hecoAddresses.SUSHISWAP_HUSD_USDT_POOL_ID;
-
-    let cropToken = await IERC20.at(hecoAddresses.SUSHI_ADDRESS);
-    let cropPool = await IMasterChef.at(hecoAddresses.SUSHISWAP_MASTER_CHEF);
-    let token0Path = tokenLiquidationPaths[0]; // [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.HUSD_ADDRESS];
-    let token1Path = tokenLiquidationPaths[1]; // [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.USDT_ADDRESS];
-
-    await strategy.initializeStrategy(
-        storage.address,
-        hecoAddresses.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
-        vault.address,
-        cropPool.address,
-        cropToken.address,
-        poolID
-    );
-
-    await strategy.setLiquidationPathsOnUni(
-        token0Path,
-        token1Path
-    );
-
-    await strategy.setLiquidationPathsOnSushi(
-        token0Path,
-        token1Path
-    );
-
-    await strategy.setUseUni(
-        false
-    );
-
-    // link vault with strategy
-    await controller.addVaultAndStrategy(vault.address, strategy.address);
-
     const deployedContracts = {
         GOVERNANCE: governance,
         STORAGE: storage.address,
         CONTROLLER: controller.address,
         // REWARD_TOKEN: rewardToken.address, // FOLDS
         // REWARD_POOL: rewardPool.address,
-        SUSHI_STRATEGY_ADDRESS: strategyImpl.address,
-        SUSHI_STRATEGY_PROXY_ADDRESS: strategy.address,
-        SUSHISWAP_HUSD_USDT_LP_VAULT_ADDRESS: vaultImpl.address,
-        SUSHISWAP_HUSD_USDT_LP_VAULT_PROXY_ADDRESS: vault.address,
         FEE_REWARD_FORWARDER: feeRewardForwarder.address,
     };
 
