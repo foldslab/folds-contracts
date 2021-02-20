@@ -12,8 +12,8 @@ const IMasterChef = artifacts.require("IMasterChef");
 const RewardToken = artifacts.require("RewardToken");
 const NoMintRewardPool = artifacts.require("NoMintRewardPool");
 
-const CONFIGS = require('../constants/hecoAddresses')
-console.log('CONFIGS: ', CONFIGS);
+const hecoAddresses = require('../constants/hecoAddresses')
+console.log('hecoAddresses: ', hecoAddresses);
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
@@ -26,7 +26,7 @@ module.exports = async function (deployer, network, accounts) {
     const storage = await Storage.deployed();
 
     // FeeRewardForwarder
-    await deployer.deploy(FeeRewardForwarder, storage.address, CONFIGS.UNISWAP_V2_ROUTER02_ADDRESS);
+    await deployer.deploy(FeeRewardForwarder, storage.address, hecoAddresses.UNISWAP_V2_ROUTER02_ADDRESS);
     const feeRewardForwarder = await FeeRewardForwarder.deployed();
 
     // set governance as the reward fee receiver
@@ -43,7 +43,7 @@ module.exports = async function (deployer, network, accounts) {
     // await deployer.deploy(
     //     NoMintRewardPool,
     //     rewardToken.address, // rewardToken should be FOLDS
-    //     CONFIGS.SUSHISWAP_HUSD_USDT_LP_ADDRESS, // lpToken
+    //     hecoAddresses.SUSHISWAP_HUSD_USDT_LP_ADDRESS, // lpToken
     //     rewardDuration,     // duration
     //     rewardDistribution, // reward distribution
     //     storage.address,    // storage
@@ -71,7 +71,7 @@ module.exports = async function (deployer, network, accounts) {
 
     await vault.initializeVault(
         storage.address,
-        CONFIGS.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
+        hecoAddresses.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
         100,
         100
     );
@@ -89,19 +89,19 @@ module.exports = async function (deployer, network, accounts) {
 
     // external setup
     const tokenLiquidationPaths = [
-        [CONFIGS.SUSHI_ADDRESS, CONFIGS.HUSD_ADDRESS],
-        [CONFIGS.SUSHI_ADDRESS, CONFIGS.USDT_ADDRESS]
+        [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.HUSD_ADDRESS],
+        [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.USDT_ADDRESS]
     ];
-    const poolID = CONFIGS.SUSHISWAP_HUSD_USDT_POOL_ID;
+    const poolID = hecoAddresses.SUSHISWAP_HUSD_USDT_POOL_ID;
 
-    let cropToken = await IERC20.at(CONFIGS.SUSHI_ADDRESS);
-    let cropPool = await IMasterChef.at(CONFIGS.SUSHISWAP_MASTER_CHEF);
-    let token0Path = tokenLiquidationPaths[0]; // [CONFIGS.SUSHI_ADDRESS, CONFIGS.HUSD_ADDRESS];
-    let token1Path = tokenLiquidationPaths[1]; // [CONFIGS.SUSHI_ADDRESS, CONFIGS.USDT_ADDRESS];
+    let cropToken = await IERC20.at(hecoAddresses.SUSHI_ADDRESS);
+    let cropPool = await IMasterChef.at(hecoAddresses.SUSHISWAP_MASTER_CHEF);
+    let token0Path = tokenLiquidationPaths[0]; // [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.HUSD_ADDRESS];
+    let token1Path = tokenLiquidationPaths[1]; // [hecoAddresses.SUSHI_ADDRESS, hecoAddresses.USDT_ADDRESS];
 
     await strategy.initializeStrategy(
         storage.address,
-        CONFIGS.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
+        hecoAddresses.SUSHISWAP_HUSD_USDT_LP_ADDRESS,
         vault.address,
         cropPool.address,
         cropToken.address,
