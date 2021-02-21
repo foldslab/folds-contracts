@@ -57,6 +57,9 @@ module.exports = async function (deployer, network, accounts) {
     // Controller
     await deployer.deploy(Controller, storage.address, feeRewardForwarder.address);
     const controller = await Controller.deployed();
+    // TODO
+    controller.addHardWorker(HARDWORKER_ADDRESS);
+
     // Storage setting
     await storage.setController(controller.address);
 
