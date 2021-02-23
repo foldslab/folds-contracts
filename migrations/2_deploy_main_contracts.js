@@ -26,7 +26,7 @@ module.exports = async function (deployer, network, accounts) {
     const storage = await Storage.deployed();
 
     // FeeRewardForwarder
-    await deployer.deploy(FeeRewardForwarder, storage.address, hecoAddresses.UNISWAP_V2_ROUTER02_ADDRESS);
+    await deployer.deploy(FeeRewardForwarder, storage.address);
     const feeRewardForwarder = await FeeRewardForwarder.deployed();
 
     // set governance as the reward fee receiver
