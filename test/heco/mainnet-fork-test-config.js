@@ -1,3 +1,3 @@
-const hecoAddresses = require('../constants/hecoAddresses')
+const hecoAddresses = require('../../constants/hecoAddresses')
 
 module.exports = hecoAddresses;

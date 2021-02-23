@@ -1,10 +1,8 @@
 // This test is only invoked if MAINNET_E2E is set
 if ( process.env.MAINNET_E2E ) {
-  // todo: load contracts from json 
-  
   // configurations and test helpers
-  const hecoAddresses = require("../constants/hecoAddresses.js");
-  const deployedContracts = require("../constants/deployedContracts.js");
+  const hecoAddresses = require("../../constants/hecoAddresses.js");
+  const deployedContracts = require("../../constants/deployedContracts.js");
   const {assertBNGt, advanceNBlock, gasLog, printGasLog} = require("../Utils.js");
   const makeVault = require("../make-vault.js");
   const { expectRevert, send, time } = require('@openzeppelin/test-helpers');
