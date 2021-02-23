@@ -13,7 +13,7 @@ const RewardToken = artifacts.require("RewardToken");
 const NoMintRewardPool = artifacts.require("NoMintRewardPool");
 
 const hecoAddresses = require('../constants/hecoAddresses')
-console.log('hecoAddresses: ', hecoAddresses);
+const secret = require("../secret.json");
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
@@ -57,8 +57,8 @@ module.exports = async function (deployer, network, accounts) {
     // Controller
     await deployer.deploy(Controller, storage.address, feeRewardForwarder.address);
     const controller = await Controller.deployed();
-    // TODO
-    controller.addHardWorker(HARDWORKER_ADDRESS);
+
+    controller.addHardWorker(secret.hardWorkerAddress);
 
     // Storage setting
     await storage.setController(controller.address);
