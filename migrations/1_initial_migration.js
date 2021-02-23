@@ -1,9 +1,7 @@
 const Migrations = artifacts.require("Util/Migrations");
 
 module.exports = function(deployer, network, accounts) {
-
-  console.log("ACCOUNTS");
-  console.log(accounts);
+  if (network === 'development') return;
 
   deployer.deploy(Migrations);
 };

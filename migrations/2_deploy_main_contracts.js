@@ -17,6 +17,7 @@ const secret = require("../secret.json");
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
+    if (network === 'development') return;
     const governance = accounts[0]
     // ======== Deploy most of the contracts ========
     console.log('===== DEPLOY MOST OF THE CONTRACTS =====');

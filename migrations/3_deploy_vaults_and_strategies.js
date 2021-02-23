@@ -47,6 +47,8 @@ const vaultsToBeDeployed = [
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
+    if (network === 'development') return;
+
     async function deployVaultAndStrategy(vaultKey) {
         console.log('===== DEPLOY VAULTS CONTRACTS =====');
         const storageAddress = deployedContracts.STORAGE;
