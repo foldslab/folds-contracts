@@ -83,7 +83,7 @@ contract("NotifyHelper Test", function (accounts) {
           { from: governance }
       );
 
-      feeRewardForwarder = await FeeRewardForwarder.new(storage.address, rewardToken.address, accounts[5], {from : governance});
+      feeRewardForwarder = await FeeRewardForwarder.new(storage.address, {from : governance});
       await feeRewardForwarder.setTokenPool(profitsharePool.address, {from : governance});
 
       // mint reward and transfer to pool
