@@ -191,7 +191,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
       routesToken1 = sushiswapRoutes[address(uniLPComponentToken1)];
     }
 
-    if (remainingRewardBalance = 0) return;  // will return if no token to swap
+    if (remainingRewardBalance == 0) return;  // will return if no token to swap
 
     // allow Uniswap to sell our reward
     uint256 amountOutMin = 1;
