@@ -360,6 +360,10 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     setBoolean(_USE_UNI_SLOT, _value);
   }
 
+  function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
+    _setProfitSharingNumerator(_profitSharingNumerator);
+  }
+
   function useUni() public view returns (bool) {
     return getBoolean(_USE_UNI_SLOT);
   }
