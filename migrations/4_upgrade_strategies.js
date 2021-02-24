@@ -9,7 +9,7 @@ console.log('deployedContracts: ', deployedContracts);
 
 import utils from '../utils/address'
 
-const vaultsToBeDeployed = [
+const vaultKeys = [
     // 'HBTC_USDT',
     // 'ETH_USDT',
     // 'HUSD_USDT',
@@ -40,6 +40,7 @@ const vaultsToBeDeployed = [
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
     if (network === 'development') return;
+    if (vaultKeys.length === 0) return;
 
     async function deployVaultAndStrategy(vaultKey) {
         console.log(`===== DEPLOY ${vaultKey} CONTRACTS =====`);
@@ -60,7 +61,7 @@ module.exports = async function (deployer, network, accounts) {
         };
     }
 
-    for (const vaultKey of vaultsToBeDeployed) {
+    for (const vaultKey of vaultKeys) {
         const vaultContracts = await deployVaultAndStrategy(vaultKey);
         deployedContracts[vaultKey].STRATEGY_IMPL_ADDRESS = vaultContracts.STRATEGY_IMPL_ADDRESS;
 
