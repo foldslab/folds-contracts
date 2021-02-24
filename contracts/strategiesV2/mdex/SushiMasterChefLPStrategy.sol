@@ -191,25 +191,22 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
       routesToken1 = sushiswapRoutes[address(uniLPComponentToken1)];
     }
 
+    if (remainingRewardBalance = 0) return;  // will return if no token to swap
 
-    if (remainingRewardBalance > 0 // we have tokens to swap
-      && routesToken0.length > 1 // and we have a route to do the swap
-      && routesToken1.length > 1 // and we have a route to do the swap
-    ) {
+    // allow Uniswap to sell our reward
+    uint256 amountOutMin = 1;
 
-      // allow Uniswap to sell our reward
-      uint256 amountOutMin = 1;
+    IERC20(rewardToken()).safeApprove(routerV2, 0);
+    IERC20(rewardToken()).safeApprove(routerV2, remainingRewardBalance);
 
-      IERC20(rewardToken()).safeApprove(routerV2, 0);
-      IERC20(rewardToken()).safeApprove(routerV2, remainingRewardBalance);
+    uint256 toToken0 = remainingRewardBalance / 2;
+    uint256 toToken1 = remainingRewardBalance.sub(toToken0);
 
-      uint256 toToken0 = remainingRewardBalance / 2;
-      uint256 toToken1 = remainingRewardBalance.sub(toToken0);
+    // we sell to uni
 
-      // we sell to uni
-
-      // sell Uni to token1
-      // we can accept 1 as minimum because this is called only by a trusted role
+    // sell Uni to token1
+    // we can accept 1 as minimum because this is called only by a trusted role
+    if (routesToken0.length > 1) {  // and we have a route to do the swap
       IUniswapV2Router02(routerV2).swapExactTokensForTokens(
         toToken0,
         amountOutMin,
@@ -217,10 +214,13 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
         address(this),
         block.timestamp
       );
-      uint256 token0Amount = IERC20(uniLPComponentToken0).balanceOf(address(this));
+    }
+    uint256 token0Amount = IERC20(uniLPComponentToken0).balanceOf(address(this));
 
-      // sell Uni to token2
-      // we can accept 1 as minimum because this is called only by a trusted role
+    // sell Uni to token2
+    // we can accept 1 as minimum because this is called only by a trusted role
+
+    if (routesToken1.length > 1) {  // and we have a route to do the swap
       IUniswapV2Router02(routerV2).swapExactTokensForTokens(
         toToken1,
         amountOutMin,
@@ -228,28 +228,28 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
         address(this),
         block.timestamp
       );
-      uint256 token1Amount = IERC20(uniLPComponentToken1).balanceOf(address(this));
-
-      // provide token1 and token2 to SUSHI
-      IERC20(uniLPComponentToken0).safeApprove(sushiswapRouterV2, 0);
-      IERC20(uniLPComponentToken0).safeApprove(sushiswapRouterV2, token0Amount);
-
-      IERC20(uniLPComponentToken1).safeApprove(sushiswapRouterV2, 0);
-      IERC20(uniLPComponentToken1).safeApprove(sushiswapRouterV2, token1Amount);
-
-      // we provide liquidity to sushi
-      uint256 liquidity;
-      (,,liquidity) = IUniswapV2Router02(sushiswapRouterV2).addLiquidity(
-        uniLPComponentToken0,
-        uniLPComponentToken1,
-        token0Amount,
-        token1Amount,
-        1,  // we are willing to take whatever the pair gives us
-        1,  // we are willing to take whatever the pair gives us
-        address(this),
-        block.timestamp
-      );
     }
+    uint256 token1Amount = IERC20(uniLPComponentToken1).balanceOf(address(this));
+
+    // provide token1 and token2 to SUSHI
+    IERC20(uniLPComponentToken0).safeApprove(sushiswapRouterV2, 0);
+    IERC20(uniLPComponentToken0).safeApprove(sushiswapRouterV2, token0Amount);
+
+    IERC20(uniLPComponentToken1).safeApprove(sushiswapRouterV2, 0);
+    IERC20(uniLPComponentToken1).safeApprove(sushiswapRouterV2, token1Amount);
+
+    // we provide liquidity to sushi
+    uint256 liquidity;
+    (,,liquidity) = IUniswapV2Router02(sushiswapRouterV2).addLiquidity(
+      uniLPComponentToken0,
+      uniLPComponentToken1,
+      token0Amount,
+      token1Amount,
+      1,  // we are willing to take whatever the pair gives us
+      1,  // we are willing to take whatever the pair gives us
+      address(this),
+      block.timestamp
+    );
   }
 
   /*

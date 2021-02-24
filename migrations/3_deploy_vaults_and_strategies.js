@@ -17,6 +17,8 @@ const hecoAddresses = require('../constants/hecoAddresses')
 const deployedContracts = require('../constants/deployedContracts')
 console.log('deployedContracts: ', deployedContracts);
 
+import utils from '../utils/address'
+
 const vaultsToBeDeployed = [
     'HBTC_USDT',
     'ETH_USDT',
@@ -95,15 +97,12 @@ module.exports = async function (deployer, network, accounts) {
 
         console.log('token0Address, token1Address, sushiAddress, sushiMasterChefAddress: ', token0Address, token1Address, sushiAddress, sushiMasterChefAddress)
 
-        const tokenLiquidationPaths = [
-            [sushiAddress, token0Address],
-            [sushiAddress, token1Address]
-        ];
-
         const cropToken = await IERC20.at(sushiAddress);
         const cropPool = await IMasterChef.at(sushiMasterChefAddress);
-        const token0Path = tokenLiquidationPaths[0];
-        const token1Path = tokenLiquidationPaths[1];
+        const isToken0Sushi = utils.isSameAddress(sushiAddress, token0Address);
+        const isToken1Sushi = utils.isSameAddress(sushiAddress, token1Address);
+        const token0Path = isToken0Sushi ? [] : [sushiAddress, token0Address];
+        const token1Path = isToken1Sushi ? [] : [sushiAddress, token1Address];
 
         await strategy.initializeStrategy(
             storageAddress,
