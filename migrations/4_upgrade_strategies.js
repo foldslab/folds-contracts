@@ -39,6 +39,7 @@ const vaultKeys = [
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
+    const governance = accounts[0];
     if (network === 'development') return;
     if (vaultKeys.length === 0) return;
 
