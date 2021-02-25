@@ -7,7 +7,7 @@ const hecoAddresses = require('../constants/hecoAddresses')
 const deployedContracts = require('../constants/deployedContracts')
 console.log('deployedContracts: ', deployedContracts);
 
-import utils from '../utils/address'
+const utils = require('../utils/address')
 
 const vaultKeys = [
     // 'HBTC_USDT',
