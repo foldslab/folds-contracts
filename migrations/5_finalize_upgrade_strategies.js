@@ -75,7 +75,7 @@ module.exports = async function (deployer, network, accounts) {
             token1Path
         );
 
-        const strategyImplAddressNew = await strategy.implementation();
+        const strategyImplAddressNew = await strategyProxy.implementation();
         console.log('strategyImplAddress, strategyImplAddressNew', strategyImplAddress, strategyImplAddressNew)
         return {
             STRATEGY_IMPL_ADDRESS: strategyImplAddressNew,    // implementation
