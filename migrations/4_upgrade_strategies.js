@@ -39,7 +39,6 @@ const vaultKeys = [
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
-    const governance = accounts[0];
     if (network === 'development') return;
     if (vaultKeys.length === 0) return;
 
@@ -52,10 +51,10 @@ module.exports = async function (deployer, network, accounts) {
 
         const strategy = await SushiMasterChefLPStrategy.at(deployedContracts[vaultKey].STRATEGY_ADDRESS);
 
-        await strategy.scheduleUpgrade(strategyImpl.address, {from: governance});
+        await strategy.scheduleUpgrade(strategyImpl.address);
 
         // after 12 hours, call this
-        // await strategy.upgrade({from: governance});
+        // await strategy.upgrade();
 
         return {
             STRATEGY_IMPL_ADDRESS: strategyImpl.address,    // implementation

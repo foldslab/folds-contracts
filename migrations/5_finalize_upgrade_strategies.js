@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const SushiMasterChefLPStrategy = artifacts.require("SushiMasterChefLPStrategy");
+const StrategyProxy = artifacts.require("StrategyProxy");
 
 const hecoAddresses = require('../constants/hecoAddresses')
 
@@ -44,8 +45,11 @@ module.exports = async function (deployer, network, accounts) {
 
     async function finalizeUpgradeStrategy(vaultKey) {
         console.log(`===== SETUP ${vaultKey} CONTRACTS =====`);
+        const strategyAddress = deployedContracts[vaultKey].STRATEGY_ADDRESS;
+        const strategyImplAddress = deployedContracts[vaultKey].STRATEGY_IMPL_ADDRESS;
 
-        const strategy = await SushiMasterChefLPStrategy.at(deployedContracts[vaultKey].STRATEGY_ADDRESS);
+        const strategy = await SushiMasterChefLPStrategy.at(strategyAddress);
+        const strategyProxy = await StrategyProxy.at(strategyAddress);
 
         // external setup
         const tokenPairKeys = vaultKey.split('_');
@@ -59,7 +63,7 @@ module.exports = async function (deployer, network, accounts) {
         const token1Path = isToken1Sushi ? [] : [sushiAddress, token1Address];
 
         // after 12 hours, call this
-        await strategy.upgrade({from: governance});
+        await strategyProxy.upgrade();
 
         await strategy.setLiquidationPathsOnUni(
             token0Path,
@@ -71,8 +75,10 @@ module.exports = async function (deployer, network, accounts) {
             token1Path
         );
 
+        const strategyImplAddressNew = await strategy.implementation();
+        console.log('strategyImplAddress, strategyImplAddressNew', strategyImplAddress, strategyImplAddressNew)
         return {
-            STRATEGY_IMPL_ADDRESS: strategyImpl.address,    // implementation
+            STRATEGY_IMPL_ADDRESS: strategyImplAddressNew,    // implementation
         };
     }
 
