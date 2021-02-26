@@ -22,7 +22,7 @@ const vaultKeys = [
     // 'MDX_USDT',
     // 'WHT_USDT',
     // 'HPT_USDT',
-    'MDX_WHT',
+    // 'MDX_WHT',
     // 'FILDA_HUSD',
     // 'LHB_USDT',
     // 'AAVE_USDT',
