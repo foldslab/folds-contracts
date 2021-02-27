@@ -324,7 +324,8 @@ contract CompoundStrategy is IStrategy, ProfitNotifier, CompoundInteractor {
       comp.approve(address(uniswapRouterV2), balance);
       address[] memory path = new address[](3);
       path[0] = address(comp);
-      path[1] = IUniswapV2Router02(uniswapRouterV2).WETH();
+      // we use mdex, which change the interface from WETH to WHT
+      path[1] = IUniswapV2Router02(uniswapRouterV2).WHT();
       path[2] = address(underlying);
       IUniswapV2Router02(uniswapRouterV2).swapExactTokensForTokens(
         balance,

@@ -237,7 +237,7 @@ contract WETHCreamNoFoldStrategy is IStrategy, RewardTokenProfitNotifier, Compou
       IERC20(address(comp)).safeApprove(address(uniswapRouterV2), balance);
       address[] memory path = new address[](2);
       path[0] = address(comp);
-      path[1] = IUniswapV2Router02(uniswapRouterV2).WETH();
+      path[1] = IUniswapV2Router02(uniswapRouterV2).WHT();
       IUniswapV2Router02(uniswapRouterV2).swapExactTokensForTokens(
         balance,
         amountOutMin,

@@ -203,7 +203,7 @@ contract CompoundNoFoldStrategy is IStrategy, RewardTokenProfitNotifier, Compoun
     IERC20(address(comp)).safeApprove(address(uniswapRouterV2), balance);
     address[] memory path = new address[](3);
     path[0] = address(comp);
-    path[1] = IUniswapV2Router02(uniswapRouterV2).WETH();
+    path[1] = IUniswapV2Router02(uniswapRouterV2).WHT();
     path[2] = address(underlying);
     IUniswapV2Router02(uniswapRouterV2).swapExactTokensForTokens(
       balance,
