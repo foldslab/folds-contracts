@@ -64,19 +64,19 @@ module.exports = async function (deployer, network, accounts) {
         );
         const strategyImpl = await CompoundStrategy.deployed();
 
-        await deployer.deploy(StrategyProxy, strategyImpl.address);
-        const strategyProxy = await StrategyProxy.deployed();
-
-        const strategy = await CompoundStrategy.at(strategyProxy.address);
+        // await deployer.deploy(StrategyProxy, strategyImpl.address);
+        // const strategyProxy = await StrategyProxy.deployed();
+        // const strategy = await CompoundStrategy.at(strategyProxy.address);
+        const strategy = strategyImpl;
 
         // targeting 50% collateral ratio
         let numerator = 50;
         let denominator = 100;
         let tolerance = 2;
 
+        console.log('vault.address, strategy.address: ', vault.address, strategy.address)
         await strategy.setRatio(numerator, denominator, tolerance);
 
-        console.log('vault.address, strategy.address: ', vault.address, strategy.address)
         // link vault with strategy
         await controller.addVaultAndStrategy(vault.address, strategy.address);
 
@@ -97,6 +97,6 @@ module.exports = async function (deployer, network, accounts) {
 
     // write contract addresses to json file
     const path = __dirname + '/../constants/compoundStrategyContracts.js';
-    fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(deployedContracts));
+    fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(result));
 }
 
