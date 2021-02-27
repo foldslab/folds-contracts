@@ -69,8 +69,8 @@ module.exports = async function (deployer, network, accounts) {
         // const strategy = await CompoundStrategy.at(strategyProxy.address);
         const strategy = strategyImpl;
 
-        // targeting 10% collateral ratio
-        const numerator = 10;
+        // targeting 10% collateral ratio, 10x leverage
+        const numerator = 90;
         const denominator = 100;
         const tolerance = 2;
 
