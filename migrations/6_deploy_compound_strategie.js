@@ -69,13 +69,14 @@ module.exports = async function (deployer, network, accounts) {
         // const strategy = await CompoundStrategy.at(strategyProxy.address);
         const strategy = strategyImpl;
 
-        // targeting 50% collateral ratio
-        let numerator = 50;
-        let denominator = 100;
-        let tolerance = 2;
+        // targeting 10% collateral ratio
+        const numerator = 10;
+        const denominator = 100;
+        const tolerance = 2;
 
         console.log('vault.address, strategy.address: ', vault.address, strategy.address)
         await strategy.setRatio(numerator, denominator, tolerance);
+        await strategy.setAllowSharePriceDecrease(true);
 
         // link vault with strategy
         await controller.addVaultAndStrategy(vault.address, strategy.address);
