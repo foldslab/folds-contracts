@@ -18,7 +18,7 @@ contract CompoundInteractor is ReentrancyGuard {
 
   IERC20 public underlying;
   // todo
-  IERC20 public _weth = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+  IERC20 public _weth = IERC20(0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F);
   CompleteCToken public ctoken;
   ComptrollerInterface public comptroller;
 

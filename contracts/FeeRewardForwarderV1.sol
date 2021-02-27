@@ -8,9 +8,9 @@ import "./uniswap/interfaces/IUniswapV2Router02.sol";
 
 contract FeeRewardForwarder is Governable {
   using SafeERC20 for IERC20;
+  address constant public weth = address(0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F);
   // todo
   address constant public ycrv = address(0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8);
-  address constant public weth = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
   address constant public dai = address(0x6B175474E89094C44Da98b954EedeAC495271d0F);
   address constant public yfi = address(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e);
   address constant public link = address(0x514910771AF9Ca656af840dff83E8264EcF986CA);
