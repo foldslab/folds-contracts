@@ -6,7 +6,7 @@ const Controller = artifacts.require("Controller");
 const Vault = artifacts.require("Vault");
 const VaultProxy = artifacts.require("VaultProxy");
 const StrategyProxy = artifacts.require("StrategyProxy");
-const CompoundStrategy = artifacts.require("CompoundStrategy");
+const FildaStrategy = artifacts.require("FildaStrategy");
 const IERC20 = artifacts.require("IERC20");
 const IMasterChef = artifacts.require("IMasterChef");
 const RewardToken = artifacts.require("RewardToken");
@@ -53,7 +53,7 @@ module.exports = async function (deployer, network, accounts) {
 
         // deploy and set up the strategy
         await deployer.deploy(
-            CompoundStrategy,
+            FildaStrategy,
             storageAddress,
             underlying,
             ctoken,
@@ -62,11 +62,11 @@ module.exports = async function (deployer, network, accounts) {
             comp,
             UNISWAP_V2_ROUTER02_ADDRESS
         );
-        const strategyImpl = await CompoundStrategy.deployed();
+        const strategyImpl = await FildaStrategy.deployed();
 
         // await deployer.deploy(StrategyProxy, strategyImpl.address);
         // const strategyProxy = await StrategyProxy.deployed();
-        // const strategy = await CompoundStrategy.at(strategyProxy.address);
+        // const strategy = await FildaStrategy.at(strategyProxy.address);
         const strategy = strategyImpl;
 
         // targeting 10% collateral ratio, 10x leverage
