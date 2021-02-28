@@ -275,12 +275,13 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   }
 
   /*
-  *   Withdraws all the asset to the vault
+  *   Withdraws corresponding shares of asset to the vault
   */
-  function withdrawToVault(uint256 amount, uint totalShares) public restricted {
+  function withdrawToVault(uint256 correspondingShares, uint totalShares) public restricted {
     // Typically there wouldn't be any amount here
     // however, it is possible because of the emergencyExit
     uint256 entireBalance = IERC20(underlying()).balanceOf(address(this));
+    uint256 amount = entireBalance.mul(correspondingShares).div(totalShares);
 
     if(amount > entireBalance){
       // While we have the check above, we still using SafeMath below
