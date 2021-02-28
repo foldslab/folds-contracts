@@ -4,16 +4,16 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "./CompoundInteractor.sol";
-import "./CompleteCToken.sol";
+import "../../strategies/compound/CompoundInteractor.sol";
+import "../../strategies/compound/CompleteCToken.sol";
+import "../../strategies/ProfitNotifier.sol";
 import "../../Controllable.sol";
-import "../ProfitNotifier.sol";
 import "../../compound/ComptrollerInterface.sol";
 import "../../compound/CTokenInterfaces.sol";
 import "../../hardworkInterface/IStrategy.sol";
 import "../../uniswap/interfaces/IUniswapV2Router02.sol";
 
-contract CompoundStrategy is IStrategy, ProfitNotifier, CompoundInteractor {
+contract FildaStrategy is IStrategy, ProfitNotifier, CompoundInteractor {
 
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
