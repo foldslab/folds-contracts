@@ -281,7 +281,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     // Typically there wouldn't be any amount here
     // however, it is possible because of the emergencyExit
     uint256 entireBalance = IERC20(underlying()).balanceOf(address(this));
-    uint256 amount = entireBalance.mul(correspondingShares).div(totalShares);
+    uint256 amount = this.investedUnderlyingBalance().mul(correspondingShares).div(totalShares);
 
     if(amount > entireBalance){
       // While we have the check above, we still using SafeMath below
@@ -364,6 +364,11 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
     _setProfitSharingNumerator(_profitSharingNumerator);
   }
+
+  function setNextImplementationDelay(uint256 _nextImplementationDelay) public onlyGovernance {
+    _setNextImplementationDelay(_nextImplementationDelay);
+  }
+
 
   function useUni() public view returns (bool) {
     return getBoolean(_USE_UNI_SLOT);
