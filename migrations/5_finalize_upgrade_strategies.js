@@ -1,28 +1,26 @@
-const fs = require('fs');
-
 const SushiMasterChefLPStrategy = artifacts.require("SushiMasterChefLPStrategy");
 const StrategyProxy = artifacts.require("StrategyProxy");
-
 const hecoAddresses = require('../constants/hecoAddresses')
-
 const deployedContracts = require('../constants/deployedContracts')
-console.log('deployedContracts: ', deployedContracts);
-
 const utils = require('../utils/address')
 
 const vaultKeys = [
-    // 'HBTC_USDT',
-    // 'ETH_USDT',
-    // 'HUSD_USDT',
-    // 'HLTC_USDT',
-    // 'HBCH_USDT',
-    // 'HDOT_USDT',
+    /* deployed */
+    'MDX_USDT',
+    'HBTC_USDT',
+    'ETH_USDT',
+    'HUSD_USDT',
+    'HLTC_USDT',
+    'HBCH_USDT',
+    'HDOT_USDT',
+    'WHT_HUSD',
+    'WHT_USDT',
+    'MDX_WHT',
+    'ETH_WHT',
+
+    /* to be deployed */
     // 'HFIL_USDT',
-    // 'WHT_HUSD',
-    // 'MDX_USDT',
-    // 'WHT_USDT',
     // 'HPT_USDT',
-    // 'MDX_WHT',
     // 'FILDA_HUSD',
     // 'LHB_USDT',
     // 'AAVE_USDT',
@@ -32,7 +30,6 @@ const vaultKeys = [
     // 'BAL_USDT',
     // 'YFI_USDT',
     // 'HBTC_WHT',
-    // 'ETH_WHT',
     // 'HBTC_ETH',
     // 'HBTC_MDX',
     // 'ETH_MDX',
@@ -64,6 +61,8 @@ module.exports = async function (deployer, network, accounts) {
 
         // after 12 hours, call this
         await strategyProxy.upgrade();
+
+        await strategy.setNextImplementationDelay(1);
 
         await strategy.setLiquidationPathsOnUni(
             token0Path,

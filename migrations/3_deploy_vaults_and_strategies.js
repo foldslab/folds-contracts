@@ -19,19 +19,23 @@ console.log('deployedContracts: ', deployedContracts);
 
 const utils = require('../utils/address')
 
-const vaultsToBeDeployed = [
-    'HBTC_USDT',
-    'ETH_USDT',
-    'HUSD_USDT',
-    'HLTC_USDT',
-    'HBCH_USDT',
-    'HDOT_USDT',
+const vaultKeys = [
+    /* deployed */
+    // 'MDX_USDT',
+    // 'HBTC_USDT',
+    // 'ETH_USDT',
+    // 'HUSD_USDT',
+    // 'HLTC_USDT',
+    // 'HBCH_USDT',
+    // 'HDOT_USDT',
+    // 'WHT_HUSD',
+    // 'WHT_USDT',
+    // 'MDX_WHT',
+    // 'ETH_WHT',
+
+    /* to be deployed */
     // 'HFIL_USDT',
-    'WHT_HUSD',
-    'MDX_USDT',
-    'WHT_USDT',
     // 'HPT_USDT',
-    'MDX_WHT',
     // 'FILDA_HUSD',
     // 'LHB_USDT',
     // 'AAVE_USDT',
@@ -41,7 +45,6 @@ const vaultsToBeDeployed = [
     // 'BAL_USDT',
     // 'YFI_USDT',
     // 'HBTC_WHT',
-    'ETH_WHT',
     // 'HBTC_ETH',
     // 'HBTC_MDX',
     // 'ETH_MDX',
@@ -50,6 +53,7 @@ const vaultsToBeDeployed = [
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
     if (network === 'development') return;
+    if (vaultKeys.length === 0) return;
 
     async function deployVaultAndStrategy(vaultKey) {
         console.log('===== DEPLOY VAULTS CONTRACTS =====');
@@ -113,6 +117,8 @@ module.exports = async function (deployer, network, accounts) {
             POOL_ID
         );
 
+        await strategy.setNextImplementationDelay(1);
+
         await strategy.setLiquidationPathsOnUni(
             token0Path,
             token1Path
@@ -138,7 +144,7 @@ module.exports = async function (deployer, network, accounts) {
         };
     }
 
-    for (const vaultKey of vaultsToBeDeployed) {
+    for (const vaultKey of vaultKeys) {
         const vaultContracts = await deployVaultAndStrategy(vaultKey);
         deployedContracts[vaultKey] = vaultContracts;
 
