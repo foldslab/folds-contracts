@@ -159,7 +159,10 @@ contract FildaStrategy is IStrategy, ProfitNotifier, CompoundInteractor {
     IERC20(address(underlying)).safeTransfer(vault, vaultLoan);
   }
 
-  function withdrawToVault(uint256 amountUnderlying) external restricted protectCollateral {
+  function withdrawToVault(uint256 correspondingShares, uint totalShares) external restricted protectCollateral {
+    uint256 entireBalance = underlying.balanceOf(address(this));
+    uint256 amountUnderlying = investedUnderlyingBalance().mul(correspondingShares).div(totalShares);
+
     if (amountUnderlying <= underlying.balanceOf(address(this))) {
       IERC20(address(underlying)).safeTransfer(vault, amountUnderlying);
       return;
