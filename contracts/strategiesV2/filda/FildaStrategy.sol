@@ -10,10 +10,10 @@ import "../../strategies/ProfitNotifier.sol";
 import "../../Controllable.sol";
 import "../../compound/ComptrollerInterface.sol";
 import "../../compound/CTokenInterfaces.sol";
-import "../../hardworkInterface/IStrategy.sol";
+import "../../hardworkInterface/IStrategyV2.sol";
 import "../../uniswap/interfaces/IUniswapV2Router02.sol";
 
-contract FildaStrategy is IStrategy, ProfitNotifier, CompoundInteractor {
+contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
 
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
