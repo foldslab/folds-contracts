@@ -42,6 +42,8 @@ module.exports = async function (deployer, network, accounts) {
 
         const vault = await Vault.at(vaultProxy.address);
 
+        await vault.setAllowSharePriceDecrease(true);
+
         const toInvestNumerator = 100;  // invest all
         const toInvestDenominator = 100;
         await vault.initializeVault(
@@ -76,7 +78,6 @@ module.exports = async function (deployer, network, accounts) {
 
         console.log('vault.address, strategy.address: ', vault.address, strategy.address)
         await strategy.setRatio(numerator, denominator, tolerance);
-        await strategy.setAllowSharePriceDecrease(true);
 
         // link vault with strategy
         await controller.addVaultAndStrategy(vault.address, strategy.address);
