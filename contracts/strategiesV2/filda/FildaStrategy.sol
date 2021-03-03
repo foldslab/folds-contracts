@@ -160,7 +160,6 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   }
 
   function withdrawToVault(uint256 correspondingShares, uint totalShares) external restricted protectCollateral {
-    uint256 entireBalance = underlying.balanceOf(address(this));
     uint256 amountUnderlying = investedUnderlyingBalance().mul(correspondingShares).div(totalShares);
 
     if (amountUnderlying <= underlying.balanceOf(address(this))) {
