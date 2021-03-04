@@ -42,8 +42,6 @@ module.exports = async function (deployer, network, accounts) {
 
         const vault = await Vault.at(vaultProxy.address);
 
-        await vault.setAllowSharePriceDecrease(true);
-
         const toInvestNumerator = 100;  // invest all
         const toInvestDenominator = 100;
         await vault.initializeVault(
@@ -52,6 +50,8 @@ module.exports = async function (deployer, network, accounts) {
             toInvestNumerator,
             toInvestDenominator
         );
+
+        await vault.setAllowSharePriceDecrease(true);
 
         // deploy and set up the strategy
         await deployer.deploy(
