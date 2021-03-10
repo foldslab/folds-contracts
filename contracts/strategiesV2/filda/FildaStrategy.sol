@@ -303,8 +303,7 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   */
   function salvage(address recipient, address token, uint256 amount) public onlyGovernance {
     // To make sure that governance cannot come in and take away the coins
-    // todo
-    // require(!unsalvagableTokens[token], "token is defined as not salvagable");
+    require(!unsalvagableTokens[token], "token is defined as not salvagable");
     IERC20(token).safeTransfer(recipient, amount);
   }
 
