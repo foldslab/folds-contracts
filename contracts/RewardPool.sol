@@ -640,7 +640,7 @@ contract LPTokenWrapper {
         lpToken.safeTransfer(msg.sender, amount);
     }
 
-    // Harvest migrate
+    // Folds migrate
     // only called by the migrateStakeFor in the MigrationHelperRewardPool
     function migrateStakeFor(address target, uint256 amountNewShare) internal  {
       _totalSupply = _totalSupply.add(amountNewShare);
@@ -649,7 +649,7 @@ contract LPTokenWrapper {
 }
 
 /*
-*   [Harvest]
+*   [Folds]
 *   This pool doesn't mint.
 *   the rewards should be first transferred to this pool, then get "notified"
 *   by calling `notifyRewardAmount`
@@ -671,7 +671,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
 
     mapping (address => bool) smartContractStakers;
 
-    // Harvest Migration
+    // Folds Migration
     // lpToken is the target vault
     address public sourceVault;
     address public migrationStrategy;
@@ -684,7 +684,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
     event RewardDenied(address indexed user, uint256 reward);
     event SmartContractRecorded(address indexed smartContractAddress, address indexed smartContractInitiator);
 
-    // Harvest Migration
+    // Folds Migration
     event Migrated(address indexed account, uint256 legacyShare, uint256 newShare);
 
     modifier updateReward(address account) {
@@ -823,7 +823,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
         emit RewardAdded(reward);
     }
 
-    // Harvest Smart Contract recording
+    // Folds Smart Contract recording
     function recordSmartContract() internal {
       if( tx.origin != msg.sender ) {
         smartContractStakers[msg.sender] = true;
@@ -832,7 +832,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
     }
 
 
-    // Harvest Migrate
+    // Folds Migrate
 
     function setCanMigrate(bool _canMigrate) public onlyGovernance {
       canMigrate = _canMigrate;
@@ -844,7 +844,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
       lpToken.safeTransferFrom(msg.sender, address(this),lpToken.balanceOf(msg.sender));
     }
 
-    // called only by migrate() 
+    // called only by migrate()
     function migrateStakeFor(address target, uint256 amountNewShare) internal updateReward(target) {
       super.migrateStakeFor(target, amountNewShare);
       emit Staked(target, amountNewShare);
@@ -876,13 +876,13 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
       uint256 userLegacyShares = IERC20(sourceVault).balanceOf(msg.sender);
       require(userLegacyShares <= remainingLegacyShares, "impossible for user legacy share to have more than the remaining legacy share");
 
-      // Because of the assertion above, 
+      // Because of the assertion above,
       // we know for sure that userEquivalentNewShares must be less than unmigratedNewShares (the idle tokens sitting in this contract)
       uint256 userEquivalentNewShares = userLegacyShares.mul(unmigratedNewShares).div(remainingLegacyShares);
-      
+
       // Take the old shares from user
       IERC20(sourceVault).safeTransferFrom(msg.sender, address(this), userLegacyShares);
-      
+
       // User has now migrated, let's stake the idle tokens into the pool for the user
       migrateStakeFor(msg.sender, userEquivalentNewShares);
 

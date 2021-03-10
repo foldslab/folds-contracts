@@ -665,7 +665,7 @@ contract YAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
     }
 
     // -----------------------------------------------------------------------
-    // [Harvest Mock] -- these functions does not exist in the original contract
+    // [Mock] -- these functions does not exist in the original contract
     // but it is created for the purpose of test
     // -----------------------------------------------------------------------
     function setStartTime(uint256 _startTime) external {

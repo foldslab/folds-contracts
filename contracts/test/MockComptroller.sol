@@ -9,12 +9,12 @@ contract MockComptroller {
   }
 
   function markets(address ctoken) public view returns (bool, uint256) {
-    // got from compound for cusdc
+    // got from filda for cusdc
     return (true, 750000000000000000);
   }
 
   function compSpeeds(address ctoken) external view returns (uint256) {
-    // got from compound for cusdc
+    // got from filda for cusdc
     return 13416296358152430;
   }
 

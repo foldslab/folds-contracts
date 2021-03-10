@@ -25,7 +25,7 @@ module.exports = async function (deployer, network, accounts) {
     if (tokenNames.length === 0) return;
 
     async function deployVaultAndStrategy(tokenName) {
-        console.log('===== DEPLOY COMPOUND CONTRACTS =====');
+        console.log('===== DEPLOY FILDA CONTRACTS =====');
         const storageAddress = deployedContracts.STORAGE;
         const controller = await Controller.at(deployedContracts.CONTROLLER);
 
@@ -98,7 +98,7 @@ module.exports = async function (deployer, network, accounts) {
     }
 
     // write contract addresses to json file
-    const path = __dirname + '/../constants/compoundStrategyContracts.js';
+    const path = __dirname + '/../constants/fildaStrategyContracts.js';
     fs.writeFileSync(path, 'module.exports = ' + JSON.stringify(result));
 }
 

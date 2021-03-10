@@ -127,7 +127,7 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   }
 
   /**
-  * Exits Compound and transfers everything to the vault.
+  * Exits Filda and transfers everything to the vault.
   */
   function withdrawAllToVault() external restricted protectCollateral {
     withdrawAll();
@@ -232,7 +232,7 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   }
 
   /**
-  * Redeems maximum that can be redeemed from Compound.
+  * Redeems maximum that can be redeemed from Filda.
   */
   function redeemMaximum() internal returns (uint256) {
     // redeem as much as we can

@@ -59,22 +59,22 @@ contract MockCUSDC is ERC20Mintable, ERC20Burnable {
   }
 
   function getCash() public view returns (uint256) {
-    // from compound
+    // from filda
     return 104576645048646;
   }
 
   function totalBorrows() public view returns (uint256) {
-    // from compound
+    // from filda
     return 71094422510667;
   }
 
   function borrowRatePerBlock() public view returns (uint256) {
-    // from compound 28762459275;
+    // from filda 28762459275;
     return 30000000000;
   }
 
   function supplyRatePerBlock() public view returns (uint256) {
-    // from compound
+    // from filda
     return 11067331897;
   }
 
