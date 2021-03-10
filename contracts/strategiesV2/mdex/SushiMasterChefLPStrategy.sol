@@ -80,7 +80,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
       _vault,
       _rewardPool,
       _rewardToken,
-      200, // profit sharing numerator
+      50, // profit sharing numerator
       1000, // profit sharing denominator
       true, // sell
       1e18, // sell floor
