@@ -15,7 +15,6 @@ const NoMintRewardPool = artifacts.require("NoMintRewardPool");
 const hecoAddresses = require('../constants/hecoAddresses')
 
 const deployedContracts = require('../constants/deployedContracts')
-console.log('deployedContracts: ', deployedContracts);
 
 const utils = require('../utils/address')
 
