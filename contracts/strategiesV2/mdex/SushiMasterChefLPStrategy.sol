@@ -369,7 +369,6 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     _setNextImplementationDelay(_nextImplementationDelay);
   }
 
-
   function useUni() public view returns (bool) {
     return getBoolean(_USE_UNI_SLOT);
   }
