@@ -1,7 +1,7 @@
 const Utils = require("./Utils.js");
 const Vault = artifacts.require("Vault");
 const MockToken = artifacts.require("MockToken");
-const CompoundStrategy = artifacts.require("CompoundStrategy");
+const FildaStrategy = artifacts.require("FildaStrategy");
 const MockCUSDC = artifacts.require("MockCUSDC");
 const MockUSDC = artifacts.require("MockUSDC");
 const MockComptroller = artifacts.require("MockComptroller");
@@ -10,8 +10,8 @@ const Controller = artifacts.require("Controller");
 const Storage = artifacts.require("Storage");
 const MockUniswap = artifacts.require("MockUniswap");
 
-contract.skip("Compound Strategy Test", function (accounts) {
-  describe("Compound Interactions", function () {
+contract.skip("Filda Strategy Test", function (accounts) {
+  describe("Filda Interactions", function () {
     let owner = accounts[0];
     let vault = accounts[2];
     let governance = accounts[3];
@@ -46,7 +46,7 @@ contract.skip("Compound Strategy Test", function (accounts) {
 
       await storage.setController(controller.address, { from: governance });
       uniswap = await MockUniswap.new();
-      strategy = await CompoundStrategy.new(
+      strategy = await FildaStrategy.new(
         storage.address,
         underlying.address,
         ctoken.address,

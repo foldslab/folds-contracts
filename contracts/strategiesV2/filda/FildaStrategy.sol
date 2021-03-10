@@ -4,12 +4,12 @@ import "@openzeppelin/contracts/math/Math.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "../../strategies/compound/CompoundInteractor.sol";
-import "../../strategies/compound/CompleteCToken.sol";
+import "../../strategies/filda/CompoundInteractor.sol";
+import "../../strategies/filda/CompleteCToken.sol";
 import "../../strategies/ProfitNotifier.sol";
 import "../../Controllable.sol";
-import "../../compound/ComptrollerInterface.sol";
-import "../../compound/CTokenInterfaces.sol";
+import "../../filda/ComptrollerInterface.sol";
+import "../../filda/CTokenInterfaces.sol";
 import "../../hardworkInterface/IStrategyV2.sol";
 import "../../uniswap/interfaces/IUniswapV2Router02.sol";
 

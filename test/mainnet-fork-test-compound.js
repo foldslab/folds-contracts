@@ -8,21 +8,21 @@ if ( process.env.MAINNET_FORK ) {
   const Controller = artifacts.require("Controller");
   const Vault = artifacts.require("Vault");
   const Storage = artifacts.require("Storage");
-  const CompoundStrategy = artifacts.require("CompoundStrategy");
+  const FildaStrategy = artifacts.require("FildaStrategy");
   const makeVault = require("./make-vault.js");
 
   // ERC20 interface
   const IERC20 = artifacts.require("IERC20");
 
-  // Compound Comptroller
+  // Filda Comptroller
   // const Comptroller = artifacts.require("Comptroller");
   // UniswapV2 Router
   const UniswapV2Router02 = artifacts.require("UniswapV2Router02");
 
   BigNumber.config({DECIMAL_PLACES: 0});
 
-  contract.skip("Mainnet Compound", function(accounts){
-    describe("Compound savings", function (){
+  contract.skip("Mainnet Filda", function(accounts){
+    describe("Filda savings", function (){
 
       // external contracts
       let comptroller;
@@ -87,7 +87,7 @@ if ( process.env.MAINNET_FORK ) {
         vault = await Vault.new(storage.address, dai.address, 95, 100, {from: governance});
 
         // set up the strategy
-        strategy = await CompoundStrategy.new(
+        strategy = await FildaStrategy.new(
           storage.address,
           dai.address,
           cdai.address,
@@ -101,7 +101,7 @@ if ( process.env.MAINNET_FORK ) {
         // link vault with strategy
         await controller.addVaultAndStrategy(vault.address, strategy.address, {from: governance});
         // todo: the test fails with 70% ratio; try more parameters
-        // setting 60% to go to Compound with 2% tolerance
+        // setting 60% to go to Filda with 2% tolerance
         await strategy.setRatio(60, 100, 2, {from : governance});
       }
 
