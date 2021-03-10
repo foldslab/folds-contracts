@@ -370,8 +370,4 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
     uint256 assets = underlying.balanceOf(address(this)).add(supplied);
     return borrowed > assets ? 0 : assets.sub(borrowed);
   }
-
-  function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
-    _setProfitSharingNumerator(_profitSharingNumerator);
-  }
 }
