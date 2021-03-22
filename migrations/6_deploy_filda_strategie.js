@@ -42,7 +42,7 @@ module.exports = async function (deployer, network, accounts) {
 
         const vault = await Vault.at(vaultProxy.address);
 
-        const toInvestNumerator = 100;  // invest all
+        const toInvestNumerator = 90;  // invest 90%
         const toInvestDenominator = 100;
         await vault.initializeVault(
             storageAddress,
