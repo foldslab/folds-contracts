@@ -14,7 +14,7 @@ Twitter: https://twitter.com/FoldsFinance
 
 Telegram: https://t.me/joinchat/Y1tguR2CsYs3MTY1
 
-## Contract addresses
+## Contract addresses(Heco)
 
 | Vault             | Receipt     | Underlying  | Vault Contract Address                     | Underlying Address                         | Strategy Address                           |
 |:------------------|:------------|:------------|:-------------------------------------------|:-------------------------------------------|:-------------------------------------------|
