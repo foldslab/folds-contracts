@@ -6,3 +6,4 @@ secret.json
 .DS_Store
 fildaStrategyContracts.js
 deployedContracts.js
+artifacts
