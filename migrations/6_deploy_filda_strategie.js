@@ -16,9 +16,17 @@ const hecoAddresses = require('../constants/hecoAddresses')
 const fildaAddresses = require('../constants/fildaAddresses')
 const deployedContracts = require('../constants/deployedContracts')
 
-const tokenNames = ['USDT', 'HUSD'];
 const { comptroller, comp } = fildaAddresses.common;
 const { UNISWAP_V2_ROUTER02_ADDRESS } = hecoAddresses;
+const tokenNames = ['USDT', 'HUSD'];
+// investment number settings
+const toInvestNumerator = 90;  // invest 90%
+const toInvestDenominator = 100;
+// targeting 20% collateral ratio, 5x leverage
+const numerator = 80;
+const denominator = 100;
+const tolerance = 2;
+
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
     if (network === 'development') return;
@@ -42,8 +50,6 @@ module.exports = async function (deployer, network, accounts) {
 
         const vault = await Vault.at(vaultProxy.address);
 
-        const toInvestNumerator = 90;  // invest 90%
-        const toInvestDenominator = 100;
         await vault.initializeVault(
             storageAddress,
             underlying,
@@ -70,11 +76,6 @@ module.exports = async function (deployer, network, accounts) {
         // const strategyProxy = await StrategyProxy.deployed();
         // const strategy = await FildaStrategy.at(strategyProxy.address);
         const strategy = strategyImpl;
-
-        // targeting 20% collateral ratio, 5x leverage
-        const numerator = 80;
-        const denominator = 100;
-        const tolerance = 2;
 
         console.log('vault.address, strategy.address: ', vault.address, strategy.address)
         await strategy.setRatio(numerator, denominator, tolerance);
