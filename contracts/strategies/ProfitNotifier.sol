@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "../hardworkInterface/IController.sol";
 import "../Controllable.sol";
+import "../Governable.sol";
 
-contract ProfitNotifier is Controllable {
+contract ProfitNotifier is Governable, Controllable {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
@@ -29,6 +30,16 @@ contract ProfitNotifier is Controllable {
     // persist in the state for immutability of the fee
     profitSharingNumerator = 5; //IController(controller()).profitSharingNumerator();
     profitSharingDenominator = 100; //IController(controller()).profitSharingDenominator();
+    require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
+  }
+
+  function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
+    profitSharingNumerator = _profitSharingNumerator;
+    require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
+  }
+
+  function setProfitSharingDenominator(uint256 _profitSharingDenominator) public onlyGovernance {
+    profitSharingDenominator = _profitSharingDenominator;
     require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
   }
 

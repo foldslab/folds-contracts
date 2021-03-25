@@ -37,8 +37,8 @@ contract Controller is IController, Governable {
     // Rewards for hard work. Nullable.
     HardRewards public hardRewards;
 
-    uint256 public constant profitSharingNumerator = 5;
-    uint256 public constant profitSharingDenominator = 100;
+    uint256 public profitSharingNumerator = 5;
+    uint256 public profitSharingDenominator = 100;
 
     event SharePriceChangeLog(
       address indexed vault,
@@ -180,6 +180,16 @@ contract Controller is IController, Governable {
 
     function setHardRewards(address _hardRewards) external onlyGovernance {
         hardRewards = HardRewards(_hardRewards);
+    }
+
+    function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
+        profitSharingNumerator = _profitSharingNumerator;
+        require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
+    }
+
+    function setProfitSharingDenominator(uint256 _profitSharingDenominator) public onlyGovernance {
+        profitSharingDenominator = _profitSharingDenominator;
+        require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
     }
 
     // transfers token in the controller contract to the governance
