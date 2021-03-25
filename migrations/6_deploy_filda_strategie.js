@@ -71,8 +71,8 @@ module.exports = async function (deployer, network, accounts) {
         // const strategy = await FildaStrategy.at(strategyProxy.address);
         const strategy = strategyImpl;
 
-        // targeting 10% collateral ratio, 10x leverage
-        const numerator = 90;
+        // targeting 20% collateral ratio, 5x leverage
+        const numerator = 80;
         const denominator = 100;
         const tolerance = 2;
 
