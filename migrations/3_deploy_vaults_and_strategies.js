@@ -31,11 +31,14 @@ const vaultKeys = [
     // 'WHT_USDT',
     // 'MDX_WHT',
     // 'ETH_WHT',
+    'FILDA_HUSD',
+    'HBTC_ETH',
+    'HBTC_MDX',
+    'ETH_MDX',
 
     /* to be deployed */
     // 'HFIL_USDT',
     // 'HPT_USDT',
-    // 'FILDA_HUSD',
     // 'LHB_USDT',
     // 'AAVE_USDT',
     // 'SNX_USDT',
@@ -44,10 +47,10 @@ const vaultKeys = [
     // 'BAL_USDT',
     // 'YFI_USDT',
     // 'HBTC_WHT',
-    // 'HBTC_ETH',
-    // 'HBTC_MDX',
-    // 'ETH_MDX',
 ];
+
+const toInvestNumerator = 100;  // invest all
+const toInvestDenominator = 100;
 
 // Make sure Ganache is running beforehand
 module.exports = async function (deployer, network, accounts) {
@@ -59,7 +62,7 @@ module.exports = async function (deployer, network, accounts) {
         const storageAddress = deployedContracts.STORAGE;
         const controller = await Controller.at(deployedContracts.CONTROLLER);
 
-        console.log('======= will deploy vault: ', vaultKey, '=========');
+        console.log(/======= will deploy vault: /, vaultKey, '=========');
 
         const { LP_ADDRESS, POOL_ID } = hecoAddresses.POOLS[vaultKey];
         console.log('======= LP_ADDRESS, POOL_ID: ', LP_ADDRESS, POOL_ID, '=========');
@@ -72,8 +75,6 @@ module.exports = async function (deployer, network, accounts) {
 
         const vault = await Vault.at(vaultProxy.address);
 
-        const toInvestNumerator = 100;  // invest all
-        const toInvestDenominator = 100;
         await vault.initializeVault(
             storageAddress,
             LP_ADDRESS,
@@ -106,7 +107,7 @@ module.exports = async function (deployer, network, accounts) {
         const isToken1Sushi = utils.isSameAddress(sushiAddress, token1Address);
         const token0Path = isToken0Sushi ? [] : [sushiAddress, token0Address];
         const token1Path = isToken1Sushi ? [] : [sushiAddress, token1Address];
-
+        console.log(/ 1111111111111 /);
         await strategy.initializeStrategy(
             storageAddress,
             LP_ADDRESS,
@@ -115,6 +116,7 @@ module.exports = async function (deployer, network, accounts) {
             cropToken.address,
             POOL_ID
         );
+        console.log(/ 22222222222 /);
 
         await strategy.setNextImplementationDelay(1);
 
@@ -122,6 +124,7 @@ module.exports = async function (deployer, network, accounts) {
             token0Path,
             token1Path
         );
+        console.log(/ 333333333 /);
 
         await strategy.setLiquidationPathsOnSushi(
             token0Path,
@@ -134,6 +137,7 @@ module.exports = async function (deployer, network, accounts) {
 
         // link vault with strategy
         await controller.addVaultAndStrategy(vault.address, strategy.address);
+        console.log(/ 4444444444444 /);
 
         return {
             STRATEGY_ADDRESS: strategy.address, // proxy, what we will use
