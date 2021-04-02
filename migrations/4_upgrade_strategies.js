@@ -39,7 +39,7 @@ module.exports = async function (deployer, network, accounts) {
     if (network === 'development') return;
     if (vaultKeys.length === 0) return;
 
-    async function deployVaultAndStrategy(vaultKey) {
+    async function deployAndUpgradeStrategy(vaultKey) {
         console.log(`===== DEPLOY ${vaultKey} CONTRACTS =====`);
 
         // deploy and set up the strategy
@@ -59,7 +59,7 @@ module.exports = async function (deployer, network, accounts) {
     }
 
     for (const vaultKey of vaultKeys) {
-        const vaultContracts = await deployVaultAndStrategy(vaultKey);
+        const vaultContracts = await deployAndUpgradeStrategy(vaultKey);
         deployedContracts[vaultKey].STRATEGY_IMPL_ADDRESS = vaultContracts.STRATEGY_IMPL_ADDRESS;
 
         console.log('New contracts added, deployedContracts: ', deployedContracts)
