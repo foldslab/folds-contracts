@@ -32,9 +32,9 @@ const vaultKeys = [
     // 'MDX_WHT',
     // 'ETH_WHT',
     // 'FILDA_HUSD',
-    'HBTC_ETH',
-    'HBTC_MDX',
-    'ETH_MDX',
+    // 'HBTC_ETH',
+    // 'HBTC_MDX',
+    // 'ETH_MDX',
 
     /* to be deployed */
     // 'HFIL_USDT',
