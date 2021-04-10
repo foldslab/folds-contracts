@@ -215,8 +215,6 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
         block.timestamp
       );
     }
-    uint256 token0Amount = IERC20(uniLPComponentToken0).balanceOf(address(this));
-
     // sell Uni to token2
     // we can accept 1 as minimum because this is called only by a trusted role
 
@@ -229,6 +227,8 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
         block.timestamp
       );
     }
+
+    uint256 token0Amount = IERC20(uniLPComponentToken0).balanceOf(address(this));
     uint256 token1Amount = IERC20(uniLPComponentToken1).balanceOf(address(this));
 
     // provide token1 and token2 to SUSHI
