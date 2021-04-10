@@ -31,7 +31,7 @@ const vaultKeys = [
     // 'WHT_USDT',
     // 'MDX_WHT',
     // 'ETH_WHT',
-    // 'FILDA_HUSD',
+    // 'HUSD_FILDA',
     // 'HBTC_ETH',
     // 'HBTC_MDX',
     // 'ETH_MDX',
