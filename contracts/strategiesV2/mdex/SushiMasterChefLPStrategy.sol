@@ -363,6 +363,12 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
 
   function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
     _setProfitSharingNumerator(_profitSharingNumerator);
+    require(profitSharingNumerator() < profitSharingDenominator(), "invalid profit share");
+  }
+
+  function setProfitSharingDenominator(uint256 _profitSharingDenominator) public onlyGovernance {
+    _setProfitSharingDenominator(_profitSharingNumerator);
+    require(profitSharingNumerator() < profitSharingDenominator(), "invalid profit share");
   }
 
   function setNextImplementationDelay(uint256 _nextImplementationDelay) public onlyGovernance {
