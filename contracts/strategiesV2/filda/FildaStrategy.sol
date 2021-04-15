@@ -22,7 +22,6 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   CompleteCToken public ctoken;
   ComptrollerInterface public comptroller;
 
-  uint256 constant mantissaScale = 10 ** 18;
   uint256 constant mantissaHalfScale = 10 ** 9;
   address public vault;
   ERC20Detailed public comp;
@@ -31,7 +30,6 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   uint256 public ratioNumerator;
   uint256 public ratioDenominator;
   uint256 public toleranceNumerator;
-  uint256 public profitComp;
   uint256 public supplied;
   uint256 public borrowed;
 
