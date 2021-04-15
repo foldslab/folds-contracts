@@ -9,7 +9,7 @@ contract FeeRewardForwarder is Governable {
 
   address public profitSharingPool;
 
-  event TokenPoolSet(address token, address pool);
+  event ProfitSharingPoolSet(address pool);
 
   constructor(address _storage) public Governable(_storage) {
   }
@@ -18,13 +18,9 @@ contract FeeRewardForwarder is Governable {
   *   Set the pool that will receive the reward token
   *   based on the address of the reward Token
   */
-  function setTokenPool(address _pool) public onlyGovernance {
-    profitSharingPool = _pool;
-    emit TokenPoolSet(address(0), _pool);
-  }
-
   function setProfitSharingPool(address _pool) public onlyGovernance {
     profitSharingPool = _pool;
+    emit ProfitSharingPoolSet(_pool);
   }
 
   // Transfers the funds from the msg.sender to the pool
