@@ -22,7 +22,7 @@ contract LiquidityRecipient is Controllable {
 
   modifier onlyStrategyOrGovernance() {
     require(msg.sender == wethStrategy || msg.sender == governance(),
-      "only not the weth strategy or governance");
+      "only the weth strategy or governance");
     _;
   }
 
