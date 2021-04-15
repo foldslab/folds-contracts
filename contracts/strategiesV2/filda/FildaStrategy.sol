@@ -18,6 +18,8 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
+  event RatioSet(uint256 indexed numerator, uint256 indexed denominator, uint256 tolerance);
+
   ERC20Detailed public underlying;
   CompleteCToken public ctoken;
   ComptrollerInterface public comptroller;
@@ -320,6 +322,8 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
     ratioNumerator = numerator;
     ratioDenominator = denominator;
     toleranceNumerator = tolerance;
+
+    emit RatioSet(numerator, denominator, tolerance);
   }
 
   function liquidateComp() internal {
