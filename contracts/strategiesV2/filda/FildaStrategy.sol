@@ -67,6 +67,14 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   )
   ProfitNotifier(_storage, _underlying)
   CompoundInteractor(_underlying, _ctoken, _comptroller) public {
+    require(_storage != address(0), "_storage cannot be empty address");
+    require(_underlying != address(0), "_underlying cannot be empty address");
+    require(_ctoken != address(0), "_ctoken cannot be empty address");
+    require(_vault != address(0), "_vault cannot be empty address");
+    require(_comptroller != address(0), "_comptroller cannot be empty address");
+    require(_comp != address(0), "_comp cannot be empty address");
+    require(_uniswap != address(0), "_uniswap cannot be empty address");
+
     comptroller = ComptrollerInterface(_comptroller);
     // COMP: 0xc00e94Cb662C3520282E6f5717214004A7f26888
     comp = ERC20Detailed(_comp);
