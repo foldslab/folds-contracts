@@ -17,8 +17,7 @@ contract CompoundInteractor is ReentrancyGuard {
   using SafeERC20 for IERC20;
 
   IERC20 public underlying;
-  // todo
-  IERC20 public _weth = IERC20(0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F);
+  WETH9 public constant weth = WETH9(0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F);
   CompleteCToken public ctoken;
   ComptrollerInterface public comptroller;
 
@@ -53,7 +52,6 @@ contract CompoundInteractor is ReentrancyGuard {
     if (amountInWETH < balance) {
       balance = amountInWETH; // only supply the "amount" if its less than what we have
     }
-    WETH9 weth = WETH9(address(_weth));
     weth.withdraw(balance); // Unwrapping
     ICEther(address(ctoken)).mint.value(balance)();
   }
@@ -64,7 +62,6 @@ contract CompoundInteractor is ReentrancyGuard {
   */
   function _redeemEtherInCTokens(uint256 amountCTokens) internal nonReentrant {
     _redeemInCTokens(amountCTokens);
-    WETH9 weth = WETH9(address(_weth));
     weth.deposit.value(address(this).balance)();
   }
 
@@ -103,7 +100,6 @@ contract CompoundInteractor is ReentrancyGuard {
     // Borrow ETH, wraps into WETH
     uint256 result = ctoken.borrow(amountUnderlying);
     require(result == 0, "Borrow failed");
-    WETH9 weth = WETH9(address(_weth));
     weth.deposit.value(address(this).balance)();
   }
 
@@ -121,7 +117,6 @@ contract CompoundInteractor is ReentrancyGuard {
   * Repays a loan in ETH
   */
   function _repayInWETH(uint256 amountUnderlying) internal {
-    WETH9 weth = WETH9(address(_weth));
     weth.withdraw(amountUnderlying); // Unwrapping
     ICEther(address(ctoken)).repayBorrow.value(amountUnderlying)();
   }
@@ -150,7 +145,6 @@ contract CompoundInteractor is ReentrancyGuard {
   function redeemUnderlyingInWeth(uint256 amountUnderlying) internal {
     if (amountUnderlying > 0) {
       _redeemUnderlying(amountUnderlying);
-      WETH9 weth = WETH9(address(_weth));
       weth.deposit.value(address(this).balance)();
     }
   }
