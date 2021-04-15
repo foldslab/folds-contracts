@@ -79,7 +79,7 @@ contract Controller is IController, Governable {
 
     modifier onlyHardWorkerOrGovernance() {
         require(hardWorkers[msg.sender] || (msg.sender == governance()),
-        "only hard worker can call this");
+        "only hard worker or governance can call this");
         _;
     }
 
