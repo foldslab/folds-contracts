@@ -266,11 +266,10 @@ contract FildaStrategy is IStrategyV2, ProfitNotifier, CompoundInteractor {
   function borrow(uint256 amountUnderlying) internal returns(uint256) {
     // borrow as much as we can
     (, uint256 collateralFactorMantissa) = comptroller.markets(address(ctoken));
-    collateralFactorMantissa = collateralFactorMantissa.div(10 ** 12);
 
     uint256 loan = ctoken.borrowBalanceCurrent(address(this));
     uint256 supply = ctoken.balanceOfUnderlying(address(this));
-    uint256 max = supply.mul(collateralFactorMantissa).div(10 ** 6);
+    uint256 max = supply.mul(collateralFactorMantissa).div(10 ** 12).div(10 ** 6);
     uint256 canBorrow = loan >= max ? 0 : max.sub(loan);
 
     if (canBorrow == 0) {
