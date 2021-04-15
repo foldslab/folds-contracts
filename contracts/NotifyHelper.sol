@@ -57,7 +57,7 @@ contract NotifyHelper is Controllable {
     uint256 profitShareIncentiveForWeek,
     uint256 firstProfitShareTimestamp,
     uint256 sum
-  ) public onlyGovernance {
+  ) external onlyGovernance {
     require(amounts.length == pools.length, "Amounts and pools lengths mismatch");
 
     profitShareIncentiveDaily = profitShareIncentiveForWeek.div(7);
