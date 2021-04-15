@@ -72,7 +72,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     address _rewardPool,
     address _rewardToken,
     uint256 _poolID
-  ) public initializer {
+  ) external initializer {
 
     BaseUpgradeableStrategy.initialize(
       _storage,
@@ -135,7 +135,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   *   Governance can exit the pool properly
   *   The function is only used for emergency to exit the pool
   */
-  function emergencyExit() public onlyGovernance {
+  function emergencyExit() external onlyGovernance {
     exitRewardPool();
     _setPausedInvesting(true);
   }
@@ -266,7 +266,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   /*
   *   Withdraws all the asset to the vault
   */
-  function withdrawAllToVault() public restricted {
+  function withdrawAllToVault() external restricted {
     if (address(rewardPool()) != address(0)) {
       exitRewardPool();
     }
@@ -277,7 +277,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   /*
   *   Withdraws corresponding shares of asset to the vault
   */
-  function withdrawToVault(uint256 correspondingShares, uint totalShares) public restricted {
+  function withdrawToVault(uint256 correspondingShares, uint totalShares) external restricted {
     // Typically there wouldn't be any amount here
     // however, it is possible because of the emergencyExit
     uint256 entireBalance = IERC20(underlying()).balanceOf(address(this));
