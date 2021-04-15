@@ -25,7 +25,10 @@ contract ProfitNotifier is Governable, Controllable {
   constructor(
     address _storage,
     address _underlying
-  ) public Controllable(_storage){
+  ) public Controllable(_storage) {
+    require(_storage != address(0), "_storage cannot be empty address");
+    require(_underlying != address(0), "_underlying cannot be empty address");
+
     underlying = _underlying;
     // persist in the state for immutability of the fee
     profitSharingNumerator = 5; //IController(controller()).profitSharingNumerator();
