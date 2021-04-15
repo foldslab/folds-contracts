@@ -122,7 +122,7 @@ contract LiquidityRecipient is Controllable {
   * Adds liquidity to Uniswap. There is no vault for this cannot be invoked via controller. It has
   * to be restricted for market manipulation reasons, so only governance can call this method.
   */
-  function doHardWork() public onlyGovernance {
+  function doHardWork() external onlyGovernance {
     addLiquidity();
   }
 
@@ -130,7 +130,7 @@ contract LiquidityRecipient is Controllable {
   * Borrows the set amount of WETH from the strategy, and will invest all available liquidity
   * to Uniswap. This assumes that an approval from the strategy exists.
   */
-  function takeLoan(uint256 amount) public onlyStrategy {
+  function takeLoan(uint256 amount) external onlyStrategy {
     IERC20(weth).safeTransferFrom(wethStrategy, address(this), amount);
     addLiquidity();
   }
@@ -140,7 +140,7 @@ contract LiquidityRecipient is Controllable {
   * and providing approvals to the strategy (for WETH) and to treasury (for FARM). The strategy
   * will make the WETH withdrawal by the pull pattern, and so will the treasury.
   */
-  function settleLoan() public onlyStrategyOrGovernance {
+  function settleLoan() external onlyStrategyOrGovernance {
     removeLiquidity();
     IERC20(weth).safeApprove(wethStrategy, 0);
     IERC20(weth).safeApprove(wethStrategy, uint256(-1));
