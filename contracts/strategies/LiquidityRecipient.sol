@@ -58,12 +58,17 @@ contract LiquidityRecipient is Controllable {
   )
   Controllable(_storage)
   public {
+    require(_weth != address(0), "weth cannot be address(0)");
+    require(_farm != address(0), "farm cannot be address(0)");
+    require(_treasury != address(0), "treasury cannot be address(0)");
+    require(_uniswap != address(0), "uniswap cannot be address(0)");
+    require(_uniLp != address(0), "uniLp cannot be address(0)");
+    require(_wethStrategy != address(0), "wethStrategy cannot be address(0)");
+
     weth = _weth;
     farm = _farm;
-    require(_treasury != address(0), "treasury cannot be address(0)");
     treasury = _treasury;
     uniswap = _uniswap;
-    require(_uniLp != address(0), "uniLp cannot be address(0)");
     uniLp = _uniLp;
     unsalvagableTokens[_weth] = true;
     unsalvagableTokens[_uniLp] = true;
