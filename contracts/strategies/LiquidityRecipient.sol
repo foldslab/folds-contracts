@@ -156,7 +156,7 @@ contract LiquidityRecipient is Controllable {
   */
   function wethOverdraft() external onlyStrategy {
     if (IERC20(weth).balanceOf(address(this)) > 0) {
-      IERC20(weth).safeTransfer(treasury, IERC20(weth).balanceOf(address(this)));      
+      IERC20(weth).safeTransfer(treasury, IERC20(weth).balanceOf(address(this)));
     }
   }
 
