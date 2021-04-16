@@ -49,6 +49,12 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
+  event ProfitSharingNumeratorSet(uint256 _profitSharingNumerator);
+  event ProfitSharingDenominatorSet(uint256 _profitSharingDenominator);
+  event LiquidationPathsOnUniSet(address [] _uniswapRouteToToken0, address [] _uniswapRouteToToken1);
+  event LiquidationPathsOnSushiSet(address [] _uniswapRouteToToken0, address [] _uniswapRouteToToken1);
+  event UpgradeFinalized();
+
   address public constant uniswapRouterV2 = address(0xED7d5F38C79115ca12fe6C0041abb22F0A06C300);
   address public constant sushiswapRouterV2 = address(0xED7d5F38C79115ca12fe6C0041abb22F0A06C300);
 
@@ -146,20 +152,6 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
 
   function continueInvesting() public onlyGovernance {
     _setPausedInvesting(false);
-  }
-
-  function setLiquidationPathsOnUni(address [] memory _uniswapRouteToToken0, address [] memory _uniswapRouteToToken1) public onlyGovernance {
-    address uniLPComponentToken0 = IUniswapV2Pair(underlying()).token0();
-    address uniLPComponentToken1 = IUniswapV2Pair(underlying()).token1();
-    uniswapRoutes[uniLPComponentToken0] = _uniswapRouteToToken0;
-    uniswapRoutes[uniLPComponentToken1] = _uniswapRouteToToken1;
-  }
-
-  function setLiquidationPathsOnSushi(address [] memory _uniswapRouteToToken0, address [] memory _uniswapRouteToToken1) public onlyGovernance {
-    address uniLPComponentToken0 = IUniswapV2Pair(underlying()).token0();
-    address uniLPComponentToken1 = IUniswapV2Pair(underlying()).token1();
-    sushiswapRoutes[uniLPComponentToken0] = _uniswapRouteToToken0;
-    sushiswapRoutes[uniLPComponentToken1] = _uniswapRouteToToken1;
   }
 
   // We assume that all the tradings can be done on Uniswap
@@ -333,6 +325,14 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     investAllUnderlying();
   }
 
+  function useUni() public view returns (bool) {
+    return getBoolean(_USE_UNI_SLOT);
+  }
+
+  function poolId() public view returns (uint256) {
+    return getUint256(_POOLID_SLOT);
+  }
+
   /**
   * Can completely disable claiming UNI rewards and selling. Good for emergency withdraw in the
   * simplest possible way.
@@ -353,10 +353,6 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     setUint256(_POOLID_SLOT, _value);
   }
 
-  function poolId() public view returns (uint256) {
-    return getUint256(_POOLID_SLOT);
-  }
-
   function setUseUni(bool _value) public onlyGovernance {
     setBoolean(_USE_UNI_SLOT, _value);
   }
@@ -364,19 +360,38 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
   function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
     _setProfitSharingNumerator(_profitSharingNumerator);
     require(profitSharingNumerator() < profitSharingDenominator(), "invalid profit share");
+    // todo emit event
+    emit ProfitSharingNumeratorSet(_profitSharingNumerator);
   }
 
   function setProfitSharingDenominator(uint256 _profitSharingDenominator) public onlyGovernance {
     _setProfitSharingDenominator(_profitSharingDenominator);
     require(profitSharingNumerator() < profitSharingDenominator(), "invalid profit share");
+    // todo emit event
+    emit ProfitSharingDenominatorSet(_profitSharingDenominator);
   }
+
+  function setLiquidationPathsOnUni(address [] memory _uniswapRouteToToken0, address [] memory _uniswapRouteToToken1) public onlyGovernance {
+    address uniLPComponentToken0 = IUniswapV2Pair(underlying()).token0();
+    address uniLPComponentToken1 = IUniswapV2Pair(underlying()).token1();
+    uniswapRoutes[uniLPComponentToken0] = _uniswapRouteToToken0;
+    uniswapRoutes[uniLPComponentToken1] = _uniswapRouteToToken1;
+    // todo emit event
+    emit LiquidationPathsOnUniSet(_uniswapRouteToToken0, _uniswapRouteToToken1);
+  }
+
+  function setLiquidationPathsOnSushi(address [] memory _uniswapRouteToToken0, address [] memory _uniswapRouteToToken1) public onlyGovernance {
+    address uniLPComponentToken0 = IUniswapV2Pair(underlying()).token0();
+    address uniLPComponentToken1 = IUniswapV2Pair(underlying()).token1();
+    sushiswapRoutes[uniLPComponentToken0] = _uniswapRouteToToken0;
+    sushiswapRoutes[uniLPComponentToken1] = _uniswapRouteToToken1;
+    // todo emit event
+    emit LiquidationPathsOnSushiSet(_uniswapRouteToToken0, _uniswapRouteToToken1);
+  }
+
 
   function setNextImplementationDelay(uint256 _nextImplementationDelay) public onlyGovernance {
     _setNextImplementationDelay(_nextImplementationDelay);
-  }
-
-  function useUni() public view returns (bool) {
-    return getBoolean(_USE_UNI_SLOT);
   }
 
   function finalizeUpgrade() external onlyGovernance {
@@ -391,5 +406,7 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
     uniswapRoutes[uniLPComponentToken1] = new address[](0);
     sushiswapRoutes[uniLPComponentToken0] = new address[](0);
     sushiswapRoutes[uniLPComponentToken1] = new address[](0);
+    // todo emit event
+    emit UpgradeFinalized();
   }
 }
