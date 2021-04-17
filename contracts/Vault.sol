@@ -49,7 +49,7 @@ contract Vault is ERC20, ERC20Detailed, IVault, IUpgradeSource, ControllableInit
     address _underlying,
     uint256 _toInvestNumerator,
     uint256 _toInvestDenominator
-  ) public initializer {
+  ) external initializer {
     require(_toInvestNumerator <= _toInvestDenominator, "cannot invest more than 100%");
     require(_toInvestDenominator != 0, "cannot divide by 0");
 
@@ -197,7 +197,7 @@ contract Vault is ERC20, ERC20Detailed, IVault, IUpgradeSource, ControllableInit
   /**
   * Indicates that the strategy update will happen in the future
   */
-  function announceStrategyUpdate(address _strategy) public onlyControllerOrGovernance {
+  function announceStrategyUpdate(address _strategy) external onlyControllerOrGovernance {
     // records a new timestamp
     uint256 when = block.timestamp.add(strategyTimeLock());
     _setStrategyUpdateTime(when);
@@ -213,7 +213,7 @@ contract Vault is ERC20, ERC20Detailed, IVault, IUpgradeSource, ControllableInit
     _setFutureStrategy(address(0));
   }
 
-  function setStrategy(address _strategy) public onlyControllerOrGovernance {
+  function setStrategy(address _strategy) external onlyControllerOrGovernance {
     require(canUpdateStrategy(_strategy),
       "The strategy exists and switch timelock did not elapse yet");
     require(_strategy != address(0), "new _strategy cannot be empty");
@@ -293,11 +293,11 @@ contract Vault is ERC20, ERC20Detailed, IVault, IUpgradeSource, ControllableInit
   * assigned to the holder.
   * This facilitates depositing for someone else (using DepositHelper)
   */
-  function depositFor(uint256 amount, address holder) public defense {
+  function depositFor(uint256 amount, address holder) external defense {
     _deposit(amount, msg.sender, holder);
   }
 
-  function withdrawAll() public onlyControllerOrGovernance whenStrategyDefined {
+  function withdrawAll() external onlyControllerOrGovernance whenStrategyDefined {
     IStrategy(strategy()).withdrawAllToVault();
   }
 
