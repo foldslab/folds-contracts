@@ -183,6 +183,9 @@ contract SushiMasterChefLPStrategy is IStrategyV2, BaseUpgradeableStrategy {
       routesToken1 = sushiswapRoutes[address(uniLPComponentToken1)];
     }
 
+    require(routesToken0.length > 1, 'routesToken0 should be valid for swap');
+    require(routesToken1.length > 1, 'routesToken1 should be valid for swap');
+
     if (remainingRewardBalance == 0) return;  // will return if no token to swap
 
     // allow Uniswap to sell our reward
