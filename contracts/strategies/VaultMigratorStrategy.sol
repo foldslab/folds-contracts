@@ -70,6 +70,7 @@ contract VaultMigratorStrategy is IStrategy, Controllable {
   }
 
   function setMigrator(address _migrator) external onlyGovernance {
+    require(_migrator != address(0), "escrow cannot be empty address");
     migrator = _migrator;
   }
 
