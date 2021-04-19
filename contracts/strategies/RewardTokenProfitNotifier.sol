@@ -10,8 +10,8 @@ contract RewardTokenProfitNotifier is Controllable {
   using SafeMath for uint256;
   using SafeERC20 for IERC20;
 
-  uint256 public profitSharingNumerator;
-  uint256 public profitSharingDenominator;
+  uint256 public profitSharingNumerator = 20; //IController(controller()).profitSharingNumerator();
+  uint256 public profitSharingDenominator = 100; //IController(controller()).profitSharingDenominator();
   address public rewardToken;
 
   constructor(
@@ -20,8 +20,6 @@ contract RewardTokenProfitNotifier is Controllable {
   ) public Controllable(_storage){
     rewardToken = _rewardToken;
     // persist in the state for immutability of the fee
-    profitSharingNumerator = 20; //IController(controller()).profitSharingNumerator();
-    profitSharingDenominator = 100; //IController(controller()).profitSharingDenominator();
     require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
   }
 
