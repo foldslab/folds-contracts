@@ -35,7 +35,7 @@ contract DepositHelper is Controllable {
   /*
   * Transfers tokens of all kinds
   */
-  function depositAll(uint256[] memory amounts, address[] memory vaultAddresses) public defense {
+  function depositAll(uint256[] memory amounts, address[] memory vaultAddresses) external defense {
     require(amounts.length == vaultAddresses.length, "DH: amounts and vault lengths mismatch");
     for (uint i = 0; i < vaultAddresses.length; i++) {
       if (amounts[i] == 0) {
