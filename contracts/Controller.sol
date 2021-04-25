@@ -40,6 +40,13 @@ contract Controller is IController, Governable {
     uint256 public profitSharingNumerator = 5;
     uint256 public profitSharingDenominator = 100;
 
+    event FeeRewardForwarderInitialized(address _feeRewardForwarder);
+    event HardWorkerAdded(address _worker);
+    event HardWorkerRemoved(address _worker);
+    event AddedToGreyList(address _target);
+    event RemovedFromGreyList(address _target);
+    event FeeRewardForwarderSet(address _feeRewardForwarder);
+    event VaultAndStrategyAdded(address _vault, address _strategy);
     event SharePriceChangeLog(
       address indexed vault,
       address indexed strategy,
@@ -47,6 +54,15 @@ contract Controller is IController, Governable {
       uint256 newSharePrice,
       uint256 timestamp
     );
+    event StrategySet(address _vault,
+            address strategy,
+            uint256 hint,
+            uint256 deviationNumerator,
+            uint256 deviationDenominator);
+    event HardRewardsSet(address _hardRewards);
+    event ProfitSharingNumeratorSet(uint256 _profitSharingNumerator);
+    event ProfitSharingDenominatorSet(uint256 _profitSharingDenominator);
+
 
     modifier validVault(address _vault){
         require(vaults[_vault], "vault does not exist");
@@ -87,16 +103,19 @@ contract Controller is IController, Governable {
     Governable(_storage) public {
         require(_feeRewardForwarder != address(0), "feeRewardForwarder should not be empty");
         feeRewardForwarder = _feeRewardForwarder;
+        emit FeeRewardForwarderInitialized(_feeRewardForwarder);
     }
 
     function addHardWorker(address _worker) public onlyGovernance {
       require(_worker != address(0), "_worker must be defined");
       hardWorkers[_worker] = true;
+      emit HardWorkerAdded(_worker);
     }
 
     function removeHardWorker(address _worker) public onlyGovernance {
       require(_worker != address(0), "_worker must be defined");
       hardWorkers[_worker] = false;
+      emit HardWorkerRemoved(_worker);
     }
 
     function hasVault(address _vault) external returns (bool) {
@@ -106,15 +125,18 @@ contract Controller is IController, Governable {
     // Only smart contracts will be affected by the greyList.
     function addToGreyList(address _target) public onlyGovernance {
         greyList[_target] = true;
+        emit AddedToGreyList(_target);
     }
 
     function removeFromGreyList(address _target) public onlyGovernance {
         greyList[_target] = false;
+        emit RemovedFromGreyList(_target);
     }
 
     function setFeeRewardForwarder(address _feeRewardForwarder) public onlyGovernance {
       require(_feeRewardForwarder != address(0), "new reward forwarder should not be empty");
       feeRewardForwarder = _feeRewardForwarder;
+      emit FeeRewardForwarderSet(_feeRewardForwarder);
     }
 
     function addVaultAndStrategy(address _vault, address _strategy) external onlyGovernance {
@@ -126,6 +148,7 @@ contract Controller is IController, Governable {
         // no need to protect against sandwich, because there will be no call to withdrawAll
         // as the vault and strategy is brand new
         IVault(_vault).setStrategy(_strategy);
+        emit VaultAndStrategyAdded(_vault, _strategy);
     }
 
     function getPricePerFullShare(address _vault) public view returns(uint256) {
@@ -176,20 +199,24 @@ contract Controller is IController, Governable {
     onlyGovernance
     validVault(_vault) {
         IVault(_vault).setStrategy(strategy);
+        emit StrategySet(_vault, strategy, hint, deviationNumerator, deviationDenominator);
     }
 
     function setHardRewards(address _hardRewards) external onlyGovernance {
         hardRewards = HardRewards(_hardRewards);
+        emit HardRewardsSet(_hardRewards);
     }
 
     function setProfitSharingNumerator(uint256 _profitSharingNumerator) public onlyGovernance {
         profitSharingNumerator = _profitSharingNumerator;
         require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
+        emit ProfitSharingNumeratorSet(_profitSharingNumerator);
     }
 
     function setProfitSharingDenominator(uint256 _profitSharingDenominator) public onlyGovernance {
         profitSharingDenominator = _profitSharingDenominator;
         require(profitSharingNumerator < profitSharingDenominator, "invalid profit share");
+        emit ProfitSharingDenominatorSet(_profitSharingDenominator);
     }
 
     // transfers token in the controller contract to the governance
