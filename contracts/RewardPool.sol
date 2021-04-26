@@ -592,6 +592,7 @@ contract IRewardDistributionRecipient is Ownable {
         external
         onlyOwner
     {
+        require( _rewardDistribution != address(0), '_rewardDistribution should not be empty');
         rewardDistribution = _rewardDistribution;
     }
 }
@@ -713,6 +714,13 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
     IRewardDistributionRecipient(_rewardDistribution)
     Controllable(_storage) // only used for referencing the grey list
     {
+        require( _rewardToken != address(0), '_rewardToken should not be empty');
+        require(_lpToken != address(0), '_lpToken should not be empty');
+        require(_rewardDistribution != address(0), '_rewardDistribution should not be empty');
+        require(_storage != address(0), '_storage should not be empty');
+        require(_sourceVault != address(0), '_sourceVault should not be empty');
+        require(_migrationStrategy != address(0), '_migrationStrategy should not be empty');
+
         rewardToken = IERC20(_rewardToken);
         lpToken = IERC20(_lpToken);
         duration = _duration;
