@@ -46,6 +46,8 @@ contract HardRewards is Controllable {
     uint256 span = block.number.sub(lastReward[vault]);
     uint256 reward = blockReward.mul(span);
 
+    lastReward[vault] = block.number;
+
     if (reward > 0) {
       uint256 balance = token.balanceOf(address(this));
       uint256 realReward = balance >= reward ? reward : balance;
@@ -56,7 +58,6 @@ contract HardRewards is Controllable {
     } else {
       emit Rewarded(recipient, vault, 0);
     }
-    lastReward[vault] = block.number;
   }
 
   function addVault(address _vault) external onlyGovernance {
