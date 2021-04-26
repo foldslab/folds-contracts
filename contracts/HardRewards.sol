@@ -79,4 +79,12 @@ contract HardRewards is Controllable {
       token.safeTransferFrom(msg.sender, address(this), _amount);
     }
   }
+
+  /**
+  * Salvages a token.
+  */
+  function salvage(address recipient, address token, uint256 amount) external onlyGovernance {
+    // To make sure that governance cannot come in and take away the coins
+    IERC20(token).safeTransfer(recipient, amount);
+  }
 }
