@@ -770,7 +770,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
     /// The implementation is semantically analogous to getReward(), but uses a push pattern
     /// instead of pull pattern.
     function pushReward(address recipient) public updateReward(recipient) onlyGovernance {
-        uint256 reward = earned(recipient);
+        uint256 reward = rewards[recipient];
         if (reward > 0) {
             rewards[recipient] = 0;
             // If it is a normal user and not smart contract,
@@ -787,7 +787,7 @@ contract NoMintRewardPool is LPTokenWrapper, IRewardDistributionRecipient, Contr
     }
 
     function getReward() public updateReward(msg.sender) {
-        uint256 reward = earned(msg.sender);
+        uint256 reward = rewards[msg.sender];
         if (reward > 0) {
             rewards[msg.sender] = 0;
             // If it is a normal user and not smart contract,
